@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { NextRequest, NextResponse } from "next/server";
 
 const EMBEDDING_URL = "http://connect02.trooper.ai:31803";

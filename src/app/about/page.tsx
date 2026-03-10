@@ -15,7 +15,7 @@ export default function AboutPage() {
     <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
       <div className="text-center mb-8 sm:mb-12">
         <Scale className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-[hsl(43,74%,49%)] mb-4" />
-        <h1 className="text-2xl sm:text-3xl font-bold text-[hsl(220,60%,20%)] mb-3">About Project Poenie</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">About Project Poenie</h1>
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
           An AI-powered legal research platform making South African law accessible through semantic search and retrieval-augmented generation.
         </p>
@@ -32,7 +32,7 @@ export default function AboutPage() {
       </Card>
 
       {/* Pipeline */}
-      <h2 className="text-xl sm:text-2xl font-bold text-[hsl(220,60%,20%)] mb-4 sm:mb-6">The Pipeline</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6">The Pipeline</h2>
       <div className="grid gap-3 sm:gap-4 mb-6 sm:mb-8">
         {pipelineSteps.map((s, i) => (
           <div key={s.step} className="flex items-start gap-3 sm:gap-4">
@@ -41,7 +41,7 @@ export default function AboutPage() {
             </div>
             <div className="flex-1 pb-3 sm:pb-4 border-b last:border-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-sm sm:text-base text-[hsl(220,60%,20%)]">{s.title}</h3>
+                <h3 className="font-semibold text-sm sm:text-base text-foreground">{s.title}</h3>
                 {i < pipelineSteps.length - 1 && <ArrowRight className="h-4 w-4 text-muted-foreground hidden sm:block" />}
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground mt-1">{s.description}</p>
@@ -51,7 +51,7 @@ export default function AboutPage() {
       </div>
 
       {/* Tech stack */}
-      <h2 className="text-xl sm:text-2xl font-bold text-[hsl(220,60%,20%)] mb-4 sm:mb-6">Technology</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6">Technology</h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <Card>
           <CardContent className="pt-6 text-center">

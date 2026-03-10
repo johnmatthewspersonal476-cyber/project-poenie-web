@@ -53,20 +53,25 @@ export default function Home() {
               Search
             </Button>
           </form>
-          <p className="mt-4 text-xs sm:text-sm text-white/40">
-            Try: &quot;right to equality&quot;, &quot;eviction constitutional court&quot;, &quot;freedom of expression&quot;
-          </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-2 items-center">
+            <span className="text-xs text-white/40">Try:</span>
+            {["right to equality", "eviction constitutional court", "freedom of expression"].map((t) => (
+              <button key={t} onClick={() => { setQuery(t); router.push("/search?q=" + encodeURIComponent(t)); }} className="text-xs px-3 py-1 rounded-full bg-white/10 text-white/60 hover:bg-white/20 hover:text-white transition-colors">
+                {t}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Stats */}
       <section className="py-12 sm:py-16 bg-background">
-        <div className="mx-auto max-w-6xl px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="mx-auto max-w-6xl px-4 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
           {stats.map((s) => (
             <Card key={s.label} className="text-center">
               <CardContent className="pt-6">
                 <s.icon className="mx-auto h-8 w-8 text-[hsl(43,74%,49%)] mb-3" />
-                <p className="text-3xl font-bold text-[hsl(220,60%,20%)]">{s.value}</p>
+                <p className="text-3xl font-bold text-[hsl(43,74%,49%)]">{s.value}</p>
                 <p className="font-medium mt-1">{s.label}</p>
                 <p className="text-sm text-muted-foreground mt-1">{s.sub}</p>
               </CardContent>
@@ -76,13 +81,13 @@ export default function Home() {
       </section>
 
       {/* Courts */}
-      <section className="py-12 sm:py-16 bg-secondary/30">
+      <section className="py-12 sm:py-16 bg-secondary/50">
         <div className="mx-auto max-w-6xl px-4 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-[hsl(220,60%,20%)] mb-6 sm:mb-8">Courts Covered</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 sm:mb-8">Courts Covered</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {["Constitutional Court", "Supreme Court of Appeal", "High Court — Gauteng", "High Court — Western Cape", "High Court — KwaZulu-Natal", "Labour Court", "Land Claims Court", "Competition Appeal Court"].map((c) => (
-              <div key={c} className="flex items-center gap-2 bg-white rounded-lg px-4 py-3 shadow-sm border">
-                <Building2 className="h-4 w-4 shrink-0 text-[hsl(220,60%,20%)]" />
+              <div key={c} className="flex items-center gap-2 bg-white/5 rounded-lg px-4 py-3 border border-white/10">
+                <Building2 className="h-4 w-4 shrink-0 text-[hsl(43,74%,49%)]" />
                 <span className="text-sm font-medium">{c}</span>
               </div>
             ))}

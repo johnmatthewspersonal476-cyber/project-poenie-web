@@ -46,23 +46,23 @@
 
 :root {
   --radius: 0.625rem;
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --background: 222 47% 4%;
+  --foreground: 210 40% 98%;
+  --card: 220 50% 8%;
+  --card-foreground: 210 40% 96%;
+  --popover: 220 50% 8%;
+  --popover-foreground: 210 40% 96%;
   --primary: 220 60% 20%;
   --primary-foreground: 40 50% 90%;
-  --secondary: 220 14% 96%;
-  --secondary-foreground: 220 60% 20%;
-  --muted: 220 14% 96%;
-  --muted-foreground: 220 9% 46%;
+  --secondary: 220 30% 12%;
+  --secondary-foreground: 210 40% 90%;
+  --muted: 220 20% 14%;
+  --muted-foreground: 220 10% 60%;
   --accent: 43 74% 49%;
   --accent-foreground: 220 60% 15%;
   --destructive: 0 84% 60%;
-  --border: 220 13% 91%;
-  --input: 220 13% 91%;
+  --border: 220 20% 20%;
+  --input: 220 20% 20%;
   --ring: 220 60% 20%;
   --chart-1: 220 60% 20%;
   --chart-2: 43 74% 49%;

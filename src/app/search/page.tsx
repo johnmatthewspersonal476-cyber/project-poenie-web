@@ -51,7 +51,7 @@ function SearchContent() {
       const data = await resp.json();
       setResults(data.results || []);
     } catch (err: unknown) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : "Search failed");
       setResults([]);
     } finally {
       setLoading(false);
@@ -71,7 +71,7 @@ function SearchContent() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-[hsl(220,60%,20%)] mb-4 sm:mb-6">Legal Search</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4 sm:mb-6">Legal Search</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 mb-4 sm:mb-6">
         <div className="relative flex-1">
@@ -84,19 +84,19 @@ function SearchContent() {
       <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-3 mb-4 sm:mb-6">
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <select value={selectedCourt} onChange={(e) => setSelectedCourt(e.target.value)} className="text-sm border rounded-md px-2 py-1.5 w-full sm:w-auto">
+          <select value={selectedCourt} onChange={(e) => setSelectedCourt(e.target.value)} className="text-sm border border-border bg-card text-foreground rounded-md px-2 py-1.5 w-full sm:w-auto">
             {courts.map((c) => <option key={c}>{c}</option>)}
           </select>
         </div>
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="text-sm border rounded-md px-2 py-1.5 w-full sm:w-auto">
+          <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="text-sm border border-border bg-card text-foreground rounded-md px-2 py-1.5 w-full sm:w-auto">
             {yearRanges.map((y) => <option key={y}>{y}</option>)}
           </select>
         </div>
       </div>
 
-      {error && <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4 text-sm text-red-700">{error}</div>}
+      {error && <div className="bg-red-950/50 border border-red-800 rounded-md p-3 mb-4 text-sm text-red-400">{error}</div>}
 
       {loading && (
         <div className="space-y-4">
@@ -115,17 +115,17 @@ function SearchContent() {
                 <CardHeader className="pb-2">
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                     <div className="min-w-0">
-                      <CardTitle className="text-base sm:text-lg text-[hsl(220,60%,20%)]">{r.case_name}</CardTitle>
+                      <CardTitle className="text-base sm:text-lg text-foreground">{r.case_name}</CardTitle>
                       <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                         {r.citation} · {r.court} · {r.year}
                         {r.url && (
-                          <a href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center ml-2 text-blue-600 hover:underline">
+                          <a href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center ml-2 text-blue-400 hover:underline">
                             <ExternalLink className="h-3 w-3 mr-1" />SAFLII
                           </a>
                         )}
                       </p>
                     </div>
-                    <Badge variant="secondary" className="bg-[hsl(43,74%,49%)]/20 text-[hsl(43,74%,35%)] shrink-0 self-start">
+                    <Badge variant="secondary" className="bg-[hsl(43,74%,49%)]/20 text-[hsl(43,74%,49%)] shrink-0 self-start">
                       {(r.relevance * 100).toFixed(0)}% match
                     </Badge>
                   </div>

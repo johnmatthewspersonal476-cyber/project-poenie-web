@@ -41,7 +41,7 @@ export default function CorpusPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-[hsl(220,60%,20%)] mb-2">Corpus Overview</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">Corpus Overview</h1>
       <p className="text-muted-foreground mb-6 sm:mb-8">Data sources feeding the Project Poenie RAG pipeline.</p>
 
       {/* Summary */}
@@ -49,21 +49,21 @@ export default function CorpusPage() {
         <Card>
           <CardContent className="pt-6 text-center">
             <Database className="mx-auto h-8 w-8 text-[hsl(43,74%,49%)] mb-2" />
-            <p className="text-3xl font-bold text-[hsl(220,60%,20%)]">{sources.length}</p>
+            <p className="text-3xl font-bold text-foreground">{sources.length}</p>
             <p className="text-sm text-muted-foreground">Data Sources</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
             <FileText className="mx-auto h-8 w-8 text-[hsl(43,74%,49%)] mb-2" />
-            <p className="text-3xl font-bold text-[hsl(220,60%,20%)]">{totalFiles.toLocaleString()}</p>
+            <p className="text-3xl font-bold text-foreground">{totalFiles.toLocaleString()}</p>
             <p className="text-sm text-muted-foreground">Total Documents</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
             <HardDrive className="mx-auto h-8 w-8 text-[hsl(43,74%,49%)] mb-2" />
-            <p className="text-3xl font-bold text-[hsl(220,60%,20%)]">~290 GB</p>
+            <p className="text-3xl font-bold text-foreground">~290 GB</p>
             <p className="text-sm text-muted-foreground">Total Data Size</p>
           </CardContent>
         </Card>
@@ -83,7 +83,7 @@ export default function CorpusPage() {
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 mb-3">
                 <div>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                    <h3 className="font-semibold text-sm sm:text-base text-[hsl(220,60%,20%)]">{s.name}</h3>
+                    <h3 className="font-semibold text-sm sm:text-base text-foreground">{s.name}</h3>
                     <StatusBadge status={s.status} />
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground mt-1">{s.description}</p>
