@@ -2,96 +2,113 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Scale, BookOpen, FileText, Database, Building2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Search, MessageSquare, BookOpen, FileEdit, FileSearch, ArrowRight, Send } from "lucide-react";
 
-const stats = [
-  { icon: Scale, label: "ConCourt Judgments", value: "63", sub: "Indexed with embeddings" },
-  { icon: BookOpen, label: "SAFLII Judgments", value: "95,000+", sub: "Available for ingestion" },
-  { icon: FileText, label: "Government Gazettes", value: "64,292", sub: "221 GB of documents" },
-  { icon: Database, label: "Data Sources", value: "9+", sub: "PMG, SARS, SAHRC & more" },
+const features = [
+  { href: "/chat", icon: MessageSquare, title: "Chat", desc: "Ask any legal question in natural language" },
+  { href: "/research", icon: BookOpen, title: "Research", desc: "Search across SA judgments and statutes" },
+  { href: "/draft", icon: FileEdit, title: "Draft", desc: "AI-assisted legal document drafting" },
+  { href: "/analyze", icon: FileSearch, title: "Analyze", desc: "Upload and analyze contracts and documents" },
+];
+
+const prompts = [
+  "Is the death penalty constitutional in South Africa?",
+  "What are the requirements for a valid contract?",
+  "Explain section 9 of the Constitution",
+  "What is the PIE Act eviction process?",
+  "How does POPIA affect businesses?",
+  "What are grounds for unfair dismissal?",
 ];
 
 export default function Home() {
-  const [query, setQuery] = useState("");
   const router = useRouter();
+  const [query, setQuery] = useState("");
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+  const handleSubmit = (text?: string) => {
+    const q = text || query.trim();
+    if (!q) return;
+    router.push(`/chat?q=${encodeURIComponent(q)}`);
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center">
       {/* Hero */}
-      <section className="relative bg-gradient-to-b from-[hsl(220,60%,15%)] to-[hsl(220,50%,22%)] text-white py-16 sm:py-24 md:py-32">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <div className="flex justify-center mb-6">
-            <div className="rounded-full bg-[hsl(43,74%,49%)]/20 p-4">
-              <Scale className="h-10 w-10 sm:h-12 sm:w-12 text-[hsl(43,74%,49%)]" />
-            </div>
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-            Project Poenie
-          </h1>
-          <p className="mt-3 text-base sm:text-lg md:text-xl text-white/70">
-            South African Legal AI — Search across judgments, statutes, and gazettes
-          </p>
-          <form onSubmit={handleSearch} className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search South African law…"
-                className="pl-10 h-12 w-full bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-[hsl(43,74%,49%)]"
-              />
-            </div>
-            <Button type="submit" className="h-12 w-full sm:w-auto px-8 bg-[hsl(43,74%,49%)] text-[hsl(220,60%,12%)] hover:bg-[hsl(43,74%,59%)] font-semibold">
-              Search
-            </Button>
-          </form>
-          <div className="mt-4 flex flex-wrap justify-center gap-2 items-center">
-            <span className="text-xs text-white/40">Try:</span>
-            {["right to equality", "eviction constitutional court", "freedom of expression"].map((t) => (
-              <button key={t} onClick={() => { setQuery(t); router.push("/search?q=" + encodeURIComponent(t)); }} className="text-xs px-3 py-1 rounded-full bg-white/10 text-white/60 hover:bg-white/20 hover:text-white transition-colors">
-                {t}
-              </button>
-            ))}
+      <section className="w-full max-w-3xl mx-auto px-4 pt-24 pb-16 sm:pt-32 sm:pb-20 text-center">
+        <h1 className="text-4xl sm:text-5xl font-semibold text-white tracking-tight animate-fade-in-up">
+          Legal AI for South Africa
+        </h1>
+        <p className="mt-4 text-neutral-400 text-lg animate-fade-in-up-delay-1">
+          Research, draft, and analyze — powered by AI trained on South African law.
+        </p>
+
+        {/* Big centered input */}
+        <div className="mt-10 animate-fade-in-up-delay-2">
+          <div className="relative">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+              placeholder="Ask any legal question..."
+              className="w-full h-14 pl-5 pr-14 bg-white/[0.05] border border-white/[0.06] rounded-2xl text-white placeholder:text-neutral-500 text-base outline-none focus:border-[#d4a574]/40 focus:ring-1 focus:ring-[#d4a574]/20 transition-all"
+            />
+            <button
+              onClick={() => handleSubmit()}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 rounded-xl bg-[#d4a574] hover:bg-[#c4955a] text-black transition-colors"
+            >
+              <Send className="h-4 w-4" />
+            </button>
           </div>
         </div>
-      </section>
 
-      {/* Stats */}
-      <section className="py-12 sm:py-16 bg-background">
-        <div className="mx-auto max-w-6xl px-4 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-          {stats.map((s) => (
-            <Card key={s.label} className="text-center">
-              <CardContent className="pt-6">
-                <s.icon className="mx-auto h-8 w-8 text-[hsl(43,74%,49%)] mb-3" />
-                <p className="text-3xl font-bold text-[hsl(43,74%,49%)]">{s.value}</p>
-                <p className="font-medium mt-1">{s.label}</p>
-                <p className="text-sm text-muted-foreground mt-1">{s.sub}</p>
-              </CardContent>
-            </Card>
+        {/* Suggested prompts */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2 animate-fade-in-up-delay-3">
+          {prompts.map((p) => (
+            <button
+              key={p}
+              onClick={() => handleSubmit(p)}
+              className="px-3.5 py-1.5 text-xs text-neutral-400 border border-white/[0.06] rounded-full hover:bg-white/[0.03] hover:text-neutral-300 hover:border-white/[0.1] transition-all"
+            >
+              {p}
+            </button>
           ))}
         </div>
       </section>
 
-      {/* Courts */}
-      <section className="py-12 sm:py-16 bg-secondary/50">
-        <div className="mx-auto max-w-6xl px-4 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-white mb-6 sm:mb-8">Courts Covered</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {["Constitutional Court", "Supreme Court of Appeal", "High Court — Gauteng", "High Court — Western Cape", "High Court — KwaZulu-Natal", "Labour Court", "Land Claims Court", "Competition Appeal Court"].map((c) => (
-              <div key={c} className="flex items-center gap-2 bg-white/5 rounded-lg px-4 py-3 border border-white/10">
-                <Building2 className="h-4 w-4 shrink-0 text-[hsl(43,74%,49%)]" />
-                <span className="text-sm font-medium">{c}</span>
-              </div>
-            ))}
-          </div>
+      {/* Feature cards */}
+      <section className="w-full max-w-5xl mx-auto px-4 pb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {features.map((f) => (
+            <button
+              key={f.href}
+              onClick={() => router.push(f.href)}
+              className="group text-left p-6 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-300"
+            >
+              <f.icon className="h-5 w-5 text-[#d4a574] mb-4" strokeWidth={1.5} />
+              <h3 className="text-white font-semibold text-sm flex items-center gap-2">
+                {f.title}
+                <ArrowRight className="h-3.5 w-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#d4a574]" />
+              </h3>
+              <p className="mt-1.5 text-xs text-neutral-500 leading-relaxed">{f.desc}</p>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="w-full border-t border-white/[0.06] py-12">
+        <div className="max-w-5xl mx-auto px-4 flex flex-wrap justify-center gap-12 sm:gap-16">
+          {[
+            { label: "Cases Indexed", value: "63+" },
+            { label: "Documents Drafted", value: "47" },
+            { label: "Analyses Completed", value: "23" },
+            { label: "Research Sessions", value: "156" },
+          ].map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="text-2xl font-semibold text-white">{s.value}</p>
+              <p className="mt-1 text-xs text-neutral-500">{s.label}</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>
