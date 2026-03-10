@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Search, Filter, Calendar, Building2 } from "lucide-react";
+import { Search, Filter, Calendar, Building2, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,17 +18,11 @@ interface SearchResult {
   relevance: number;
   excerpt: string;
   topics: string[];
+  url?: string;
+  source?: string;
 }
 
-const MOCK_RESULTS: SearchResult[] = [
-  { id: "1", case_name: "Minister of Home Affairs v Fourie", citation: "[2005] ZACC 19", court: "Constitutional Court", year: 2005, relevance: 0.96, excerpt: "The <mark>right to equality</mark> under section 9 of the Constitution demands that same-sex couples be afforded the same status, entitlements and responsibilities as heterosexual couples…", topics: ["Equality", "Marriage", "Constitutional Rights"] },
-  { id: "2", case_name: "Barkhuizen v Napier", citation: "[2007] ZACC 5", court: "Constitutional Court", year: 2007, relevance: 0.91, excerpt: "The principle of <mark>pacta sunt servanda</mark> is not absolute and must yield to constitutional values including <mark>equality</mark> and fairness in contractual relationships…", topics: ["Contract Law", "Constitutional Values", "Fairness"] },
-  { id: "3", case_name: "Government of RSA v Grootboom", citation: "[2000] ZACC 19", court: "Constitutional Court", year: 2000, relevance: 0.89, excerpt: "Section 26 of the Constitution obliges the state to take reasonable legislative and other measures within its available resources to achieve the progressive realisation of the <mark>right</mark> of access to adequate housing…", topics: ["Housing", "Socio-economic Rights", "State Obligations"] },
-  { id: "4", case_name: "S v Makwanyane", citation: "[1995] ZACC 3", court: "Constitutional Court", year: 1995, relevance: 0.87, excerpt: "The <mark>right</mark> to life is the most fundamental of all human rights. The death penalty destroys the <mark>right</mark> to life and constitutes cruel, inhuman or degrading punishment…", topics: ["Right to Life", "Death Penalty", "Human Dignity"] },
-  { id: "5", case_name: "Investigating Directorate v Hyundai Motor", citation: "[2000] ZACC 12", court: "Constitutional Court", year: 2000, relevance: 0.84, excerpt: "The <mark>right</mark> to privacy under section 14 must be balanced against the legitimate needs of the state to investigate and prosecute crime effectively…", topics: ["Privacy", "Search and Seizure", "Criminal Procedure"] },
-];
-
-const courts = ["All Courts", "Constitutional Court", "Supreme Court of Appeal", "High Court"];
+const courts = ["All Courts", "Constitutional Court", "Supreme Court of Appeal", "Gauteng High Court (Johannesburg)", "Gauteng High Court (Pretoria)", "Western Cape High Court"];
 const yearRanges = ["All Years", "2020-2026", "2010-2019", "2000-2009", "1994-1999"];
 
 function SearchContent() {
@@ -40,15 +34,31 @@ function SearchContent() {
   const [searched, setSearched] = useState(false);
   const [selectedCourt, setSelectedCourt] = useState("All Courts");
   const [selectedYear, setSelectedYear] = useState("All Years");
+  const [error, setError] = useState<string | null>(null);
 
-  const doSearch = (q: string) => {
+  const doSearch = async (q: string) => {
     if (!q.trim()) return;
     setLoading(true);
     setSearched(true);
-    setTimeout(() => { setResults(MOCK_RESULTS); setLoading(false); }, 800);
+    setError(null);
+    try {
+      const params = new URLSearchParams({ q, limit: "20" });
+      if (selectedCourt !== "All Courts") params.set("court", selectedCourt);
+      if (selectedYear !== "All Years") params.set("year", selectedYear);
+      
+      const resp = await fetch(`/api/search?${params}`);
+      if (!resp.ok) throw new Error(`Search failed: ${resp.status}`);
+      const data = await resp.json();
+      setResults(data.results || []);
+    } catch (err: any) {
+      setError(err.message);
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { if (initialQuery) doSearch(initialQuery); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+  useEffect(() => { if (initialQuery) doSearch(initialQuery); }, [initialQuery]);
 
   const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); doSearch(query); };
 
@@ -70,7 +80,6 @@ function SearchContent() {
         <Button type="submit" className="h-11 w-full sm:w-auto px-6 bg-[hsl(220,60%,20%)] hover:bg-[hsl(220,60%,28%)]">Search</Button>
       </form>
 
-      {/* Filters */}
       <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-3 mb-4 sm:mb-6">
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -84,20 +93,10 @@ function SearchContent() {
             {yearRanges.map((y) => <option key={y}>{y}</option>)}
           </select>
         </div>
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <select className="text-sm border rounded-md px-2 py-1.5 w-full sm:w-auto">
-            <option>All Topics</option>
-            <option>Constitutional Rights</option>
-            <option>Criminal Law</option>
-            <option>Contract Law</option>
-            <option>Labour Law</option>
-            <option>Property Law</option>
-          </select>
-        </div>
       </div>
 
-      {/* Results */}
+      {error && <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-4 text-sm text-red-700">{error}</div>}
+
       {loading && (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
@@ -116,7 +115,14 @@ function SearchContent() {
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                     <div className="min-w-0">
                       <CardTitle className="text-base sm:text-lg text-[hsl(220,60%,20%)]">{r.case_name}</CardTitle>
-                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">{r.citation} · {r.court} · {r.year}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                        {r.citation} · {r.court} · {r.year}
+                        {r.url && (
+                          <a href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center ml-2 text-blue-600 hover:underline">
+                            <ExternalLink className="h-3 w-3 mr-1" />SAFLII
+                          </a>
+                        )}
+                      </p>
                     </div>
                     <Badge variant="secondary" className="bg-[hsl(43,74%,49%)]/20 text-[hsl(43,74%,35%)] shrink-0 self-start">
                       {(r.relevance * 100).toFixed(0)}% match
@@ -124,10 +130,12 @@ function SearchContent() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed" dangerouslySetInnerHTML={{ __html: r.excerpt }} />
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {r.topics.map((t) => <Badge key={t} variant="outline" className="text-xs">{t}</Badge>)}
-                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{r.excerpt}</p>
+                  {r.topics && r.topics.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {r.topics.map((t, i) => <Badge key={i} variant="outline" className="text-xs">{t}</Badge>)}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
