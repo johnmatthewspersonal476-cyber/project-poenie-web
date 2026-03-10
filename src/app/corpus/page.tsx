@@ -40,12 +40,12 @@ export default function CorpusPage() {
   const totalIngested = sources.reduce((a, s) => a + s.ingested, 0);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="text-3xl font-bold text-[hsl(220,60%,20%)] mb-2">Corpus Overview</h1>
-      <p className="text-muted-foreground mb-8">Data sources feeding the Project Poenie RAG pipeline.</p>
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold text-[hsl(220,60%,20%)] mb-2">Corpus Overview</h1>
+      <p className="text-muted-foreground mb-6 sm:mb-8">Data sources feeding the Project Poenie RAG pipeline.</p>
 
       {/* Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <Card>
           <CardContent className="pt-6 text-center">
             <Database className="mx-auto h-8 w-8 text-[hsl(43,74%,49%)] mb-2" />
@@ -70,27 +70,27 @@ export default function CorpusPage() {
       </div>
 
       {/* Overall progress */}
-      <Card className="mb-8">
-        <CardHeader><CardTitle>Overall Ingestion Progress</CardTitle></CardHeader>
+      <Card className="mb-6 sm:mb-8">
+        <CardHeader><CardTitle className="text-base sm:text-lg">Overall Ingestion Progress</CardTitle></CardHeader>
         <CardContent><ProgressBar ingested={totalIngested} total={totalFiles} /></CardContent>
       </Card>
 
       {/* Per-source */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {sources.map((s) => (
           <Card key={s.name}>
-            <CardContent className="py-5">
-              <div className="flex items-start justify-between mb-3">
+            <CardContent className="py-4 sm:py-5">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 mb-3">
                 <div>
-                  <div className="flex items-center gap-3">
-                    <h3 className="font-semibold text-[hsl(220,60%,20%)]">{s.name}</h3>
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <h3 className="font-semibold text-sm sm:text-base text-[hsl(220,60%,20%)]">{s.name}</h3>
                     <StatusBadge status={s.status} />
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">{s.description}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">{s.description}</p>
                 </div>
-                <div className="text-right shrink-0 ml-4">
+                <div className="flex gap-3 text-sm sm:text-right shrink-0">
                   <p className="font-medium">{s.files} files</p>
-                  <p className="text-sm text-muted-foreground">{s.size}</p>
+                  <p className="text-muted-foreground">{s.size}</p>
                 </div>
               </div>
               <ProgressBar ingested={s.ingested} total={s.total} />

@@ -1,5 +1,3 @@
-
-
 import { Building2, Tag, Calendar, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -37,32 +35,32 @@ const years = Array.from({ length: 30 }, (_, i) => {
 
 export default function BrowsePage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="text-3xl font-bold text-[hsl(220,60%,20%)] mb-2">Browse the Corpus</h1>
-      <p className="text-muted-foreground mb-8">Explore indexed legal documents by court, topic, or year.</p>
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold text-[hsl(220,60%,20%)] mb-2">Browse the Corpus</h1>
+      <p className="text-muted-foreground mb-6 sm:mb-8">Explore indexed legal documents by court, topic, or year.</p>
 
       <Tabs defaultValue="court">
-        <TabsList className="mb-6">
-          <TabsTrigger value="court" className="gap-2"><Building2 className="h-4 w-4" />By Court</TabsTrigger>
-          <TabsTrigger value="topic" className="gap-2"><Tag className="h-4 w-4" />By Topic</TabsTrigger>
-          <TabsTrigger value="year" className="gap-2"><Calendar className="h-4 w-4" />By Year</TabsTrigger>
+        <TabsList className="mb-6 w-full sm:w-auto overflow-x-auto">
+          <TabsTrigger value="court" className="gap-1.5 text-xs sm:text-sm"><Building2 className="h-4 w-4" /><span className="hidden sm:inline">By </span>Court</TabsTrigger>
+          <TabsTrigger value="topic" className="gap-1.5 text-xs sm:text-sm"><Tag className="h-4 w-4" /><span className="hidden sm:inline">By </span>Topic</TabsTrigger>
+          <TabsTrigger value="year" className="gap-1.5 text-xs sm:text-sm"><Calendar className="h-4 w-4" /><span className="hidden sm:inline">By </span>Year</TabsTrigger>
         </TabsList>
 
         <TabsContent value="court">
-          <div className="grid gap-4">
+          <div className="grid gap-3 sm:gap-4">
             {courtData.map((c) => (
               <Card key={c.name} className={`hover:shadow-md transition-shadow ${c.count === 0 ? "opacity-60" : "cursor-pointer"}`}>
-                <CardContent className="flex items-center justify-between py-5">
-                  <div className="flex items-center gap-4">
-                    <Building2 className="h-8 w-8 text-[hsl(220,60%,20%)]" />
+                <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 sm:py-5 gap-3">
+                  <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+                    <Building2 className="h-6 w-6 sm:h-8 sm:w-8 shrink-0 text-[hsl(220,60%,20%)]" />
                     <div>
-                      <p className="font-semibold text-[hsl(220,60%,20%)]">{c.name}</p>
-                      <p className="text-sm text-muted-foreground">{c.description}</p>
+                      <p className="font-semibold text-[hsl(220,60%,20%)] text-sm sm:text-base">{c.name}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{c.description}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <p className="text-xl font-bold text-[hsl(220,60%,20%)]">{c.count > 0 ? c.count : "—"}</p>
+                  <div className="flex items-center justify-between sm:justify-end gap-3 pl-9 sm:pl-0">
+                    <div className="sm:text-right">
+                      <p className="text-lg sm:text-xl font-bold text-[hsl(220,60%,20%)]">{c.count > 0 ? c.count : "—"}</p>
                       <p className="text-xs text-muted-foreground">{c.years}</p>
                     </div>
                     {c.count > 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
@@ -74,15 +72,15 @@ export default function BrowsePage() {
         </TabsContent>
 
         <TabsContent value="topic">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {topics.map((t) => (
               <Card key={t.name} className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="flex items-center justify-between py-5">
+                <CardContent className="flex items-center justify-between py-4 sm:py-5">
                   <div className="flex items-center gap-3">
                     <Badge className={t.color}>{t.count}</Badge>
-                    <span className="font-medium">{t.name}</span>
+                    <span className="font-medium text-sm sm:text-base">{t.name}</span>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
                 </CardContent>
               </Card>
             ))}
@@ -90,12 +88,12 @@ export default function BrowsePage() {
         </TabsContent>
 
         <TabsContent value="year">
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3">
             {years.map((y) => (
               <Card key={y.year} className={`text-center ${y.count === 0 ? "opacity-40" : "hover:shadow-md cursor-pointer"}`}>
-                <CardContent className="py-4">
-                  <p className="text-xl font-bold text-[hsl(220,60%,20%)]">{y.year}</p>
-                  <p className="text-sm text-muted-foreground">{y.count} judgment{y.count !== 1 ? "s" : ""}</p>
+                <CardContent className="py-3 sm:py-4">
+                  <p className="text-lg sm:text-xl font-bold text-[hsl(220,60%,20%)]">{y.year}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{y.count} judgment{y.count !== 1 ? "s" : ""}</p>
                 </CardContent>
               </Card>
             ))}
