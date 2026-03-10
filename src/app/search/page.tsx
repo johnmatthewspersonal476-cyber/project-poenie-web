@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Search, Filter, Calendar, Building2, ExternalLink } from "lucide-react";
+import { Search, Calendar, Building2, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,7 +50,7 @@ function SearchContent() {
       if (!resp.ok) throw new Error(`Search failed: ${resp.status}`);
       const data = await resp.json();
       setResults(data.results || []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message);
       setResults([]);
     } finally {
@@ -58,6 +58,7 @@ function SearchContent() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (initialQuery) doSearch(initialQuery); }, [initialQuery]);
 
   const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); doSearch(query); };

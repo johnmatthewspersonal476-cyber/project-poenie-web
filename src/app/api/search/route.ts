@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     const queryVector = embedData.embeddings[0];
 
     // 2. Build Qdrant filter
-    const must: any[] = [];
+    const must: Record<string, unknown>[] = [];
     if (court && court !== "All Courts") {
       must.push({ key: "court", match: { value: court } });
     }
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const searchBody: any = {
+    const searchBody: Record<string, unknown> = {
       vector: queryVector,
       limit,
       with_payload: true,
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
     }
 
     const qdrantData = await qdrantResp.json();
-    const results = (qdrantData.result || []).map((hit: any) => {
+    const results = (qdrantData.result || []).map((hit: Record<string, unknown>) => {
       const p = hit.payload || {};
       return {
         id: hit.id,
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
     });
 
     // 4. Group by document (source_file) and pick best chunk per doc
-    const docMap = new Map<string, any>();
+    const docMap = new Map<string, Record<string, unknown>>();
     for (const r of results) {
       const key = r.source_file || r.id;
       if (!docMap.has(key) || r.score > docMap.get(key).score) {
@@ -102,8 +102,8 @@ export async function GET(request: NextRequest) {
     }
 
     const grouped = Array.from(docMap.values())
-      .sort((a: any, b: any) => b.score - a.score)
-      .map((r: any) => ({
+      .sort((a: Record<string, unknown>, b: Record<string, unknown>) => b.score - a.score)
+      .map((r: Record<string, unknown>) => ({
         id: r.id,
         case_name: r.case_number || r.citation || r.source_file?.split("/").pop()?.replace(".html", "") || "Unknown",
         citation: r.citation,
@@ -121,8 +121,8 @@ export async function GET(request: NextRequest) {
       total: grouped.length,
       results: grouped,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Search error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Unknown error" }, { status: 500 });
   }
 }
